@@ -11,7 +11,8 @@ export class LeaveType {
     @Column({
         type: "varchar",
         length: 255,
-        nullable: false
+        nullable: false,
+        unique: true
     })
     name: string;
 
@@ -24,7 +25,7 @@ export class LeaveType {
     @Column({
         type: "varchar",
         length: 255,
-        nullable: false
+        nullable: true,
     })
-    description: string;
+    description?: string;
 }
