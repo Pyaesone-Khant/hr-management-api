@@ -20,9 +20,8 @@ export class Leave {
     @Column({
         type: "varchar",
         length: 255,
-        nullable: false
     })
-    description: string;
+    description?: string;
 
     @Column({
         type: "date",
@@ -43,14 +42,11 @@ export class Leave {
             eager: true,
         }
     )
-    leaveTypeId: LeaveType;
+    leaveType: LeaveType;
 
     @ManyToOne(
         () => Employee,
         emp => emp.leaves,
-        {
-            eager: true,
-        }
     )
     employee: Employee;
 }

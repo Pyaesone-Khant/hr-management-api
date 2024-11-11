@@ -26,9 +26,6 @@ export class Department {
     @OneToMany(
         () => Employee,
         emp => emp.department,
-        {
-            eager: true
-        }
     )
     employees: Employee[];
 }
