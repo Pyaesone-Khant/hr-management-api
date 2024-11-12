@@ -1,27 +1,19 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString, Matches, Max, Min, MinLength } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";
 
-export class CreateLeaveTypeDto {
+export class CreatePositionDto {
+
     @IsString()
     @IsNotEmpty()
-    @MinLength(3)
     name: string;
 
     @IsString()
     @IsNotEmpty()
-    @MinLength(3)
     @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
         message: "A slug should be all lowercase, and words should be separated by hyphens(-)."
     })
     slug: string;
 
-    @IsInt()
-    @IsNotEmpty()
-    @Min(1)
-    @Max(365)
-    days: number
-
     @IsString()
     @IsOptional()
-    @MinLength(5)
     description?: string;
 }

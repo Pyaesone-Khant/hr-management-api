@@ -11,9 +11,18 @@ export class Position {
     @Column({
         type: "varchar",
         length: 256,
-        nullable: false
+        nullable: false,
+        unique: true,
     })
     name: string;
+
+    @Column({
+        type: "varchar",
+        length: 256,
+        nullable: false,
+        unique: true,
+    })
+    slug: string;
 
     @Column({
         type: "varchar",
