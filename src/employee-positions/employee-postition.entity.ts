@@ -1,5 +1,6 @@
 import { Employee } from "src/employees/employee.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Position } from "src/positions/posititon.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class EmployeePosition {
@@ -10,21 +11,34 @@ export class EmployeePosition {
     id: number;
 
     @Column({
-        type: "varchar",
-        length: 256,
+        type: 'date',
         nullable: false
     })
-    name: string;
+    startDate: Date;
 
     @Column({
-        type: "varchar",
-        length: 256,
+        type: 'date',
+        nullable: true
     })
-    description: string;
+    endDate: Date;
 
-    @OneToMany(
+    @ManyToMany(
         () => Employee,
-        emp => emp.position,
+        emp => emp.id,
+        {
+            onDelete: 'CASCADE',
+            eager: true
+        }
     )
     employees: Employee[];
+
+    @ManyToMany(
+        () => Position,
+        pos => pos.id,
+        {
+            onDelete: 'CASCADE',
+            eager: true
+        }
+    )
+    positions: Position[];
 }

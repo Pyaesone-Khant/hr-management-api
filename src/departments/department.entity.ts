@@ -19,9 +19,9 @@ export class Department {
     @Column({
         type: 'varchar',
         length: 256,
-        nullable: false
+        nullable: true
     })
-    description: string;
+    description?: string;
 
     @OneToMany(
         () => Employee,

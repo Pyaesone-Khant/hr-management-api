@@ -11,6 +11,7 @@ import { EmployeePositionsModule } from './employee-positions/employee-positions
 import { EmployeesModule } from './employees/employees.module';
 import { LeaveTypesModule } from './leave-types/leave-types.module';
 import { LeavesModule } from './leaves/leaves.module';
+import { PositionsModule } from './positions/positions.module';
 
 const ENV = process.env.NODE_ENV;
 @Module({
@@ -42,7 +43,8 @@ const ENV = process.env.NODE_ENV;
                 synchronize: config.get('database.synchronize'),
                 autoLoadEntities: config.get('database.autoLoadEntities'),
             })
-        })
+        }),
+        PositionsModule
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -1,5 +1,4 @@
 import { Department } from "src/departments/department.entity";
-import { EmployeePosition } from "src/employee-positions/employee-postition.entity";
 import { Leave } from "src/leaves/leave.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EmploymentStatus } from "./enums/employment-status.enum";
@@ -63,7 +62,13 @@ export class Employee {
         type: 'date',
         nullable: false
     })
-    joinedDate: Date
+    startDate: Date
+
+    @Column({
+        type: 'date',
+        nullable: true
+    })
+    endDate: Date
 
     @OneToMany(
         () => Leave,
@@ -73,15 +78,6 @@ export class Employee {
         }
     )
     leaves: Leave[];
-
-    @ManyToOne(
-        () => EmployeePosition,
-        pos => pos.employees,
-        {
-            eager: true
-        }
-    )
-    position: EmployeePosition;
 
     @ManyToOne(
         () => Department,
