@@ -12,6 +12,9 @@ import { FindDepartmentBySlugProvider } from './providers/find-department-by-slu
         TypeOrmModule.forFeature([
             Department
         ])
+    ],
+    exports: [
+        DepartmentsService
     ]
 })
 export class DepartmentsModule { }

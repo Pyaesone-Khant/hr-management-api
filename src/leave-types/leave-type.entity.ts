@@ -28,7 +28,13 @@ export class LeaveType {
         type: "int",
         nullable: false
     })
-    days: number
+    totalDays: number
+
+    @Column({
+        type: "int",
+        nullable: false
+    })
+    takeableConsecDaysLimit: number
 
     @Column({
         type: "varchar",

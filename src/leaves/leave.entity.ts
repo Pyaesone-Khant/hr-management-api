@@ -1,6 +1,7 @@
 import { Employee } from "src/employees/employee.entity";
 import { LeaveType } from "src/leave-types/leave-type.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { LeaveStatus } from "./enums/leave-status.enum";
 
 @Entity()
 export class Leave {
@@ -34,6 +35,13 @@ export class Leave {
         nullable: false
     })
     endDate: Date;
+
+    @Column({
+        type: "enum",
+        enum: LeaveStatus,
+        default: LeaveStatus.PENDING
+    })
+    status: LeaveStatus;
 
     @ManyToOne(
         () => LeaveType,

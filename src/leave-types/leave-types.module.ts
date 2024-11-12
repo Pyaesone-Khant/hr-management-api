@@ -11,6 +11,9 @@ import { LeaveTypesService } from './providers/leave-types.service';
         TypeOrmModule.forFeature([
             LeaveType
         ])
+    ],
+    exports: [
+        LeaveTypesService
     ]
 })
 export class LeaveTypesModule { }

@@ -73,9 +73,6 @@ export class Employee {
     @OneToMany(
         () => Leave,
         leave => leave.employee,
-        {
-            eager: true
-        }
     )
     leaves: Leave[];
 
