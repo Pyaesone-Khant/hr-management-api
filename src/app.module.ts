@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { DataResponseInterceptor } from './common/data-response.interceptor';
 import appConfig from './configs/app.config';
 import databaseConfig from './configs/database.config';
 import environmentValidation from './configs/environment.validation';
@@ -47,6 +49,12 @@ const ENV = process.env.NODE_ENV;
         PositionsModule
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: DataResponseInterceptor
+        }
+    ],
 })
 export class AppModule { }
