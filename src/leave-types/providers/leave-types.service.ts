@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FindDataBySlugProvider } from 'src/common/providers/find-data-by-slug.provider';
 import { handleException } from 'src/helpers/exception-handler.helper';
 import { Repository } from 'typeorm';
 import { CreateLeaveTypeDto } from '../dtos/create-leave-type.dto';
@@ -12,6 +13,8 @@ export class LeaveTypesService {
     constructor(
         @InjectRepository(LeaveType)
         private readonly leaveTypeRepository: Repository<LeaveType>,
+
+        private readonly findDataBySlugProvider: FindDataBySlugProvider
     ) { }
 
     public async findAll(): Promise<LeaveType[]> {
@@ -29,6 +32,13 @@ export class LeaveTypesService {
 
     public async create(createLeaveTypeDto: CreateLeaveTypeDto): Promise<LeaveType> {
         let leaveType: LeaveType | undefined;
+        let leaveTypeBySlug: LeaveType | undefined;
+
+        leaveTypeBySlug = await this.findDataBySlugProvider.findDataBySlug(this.leaveTypeRepository, createLeaveTypeDto.slug);
+
+        if (leaveTypeBySlug) {
+            handleException(409, "Duplicated Slug!")
+        }
 
         try {
             leaveType = this.leaveTypeRepository.create(createLeaveTypeDto);

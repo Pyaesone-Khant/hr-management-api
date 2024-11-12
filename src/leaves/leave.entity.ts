@@ -21,6 +21,7 @@ export class Leave {
     @Column({
         type: "varchar",
         length: 255,
+        nullable: true
     })
     description?: string;
 
@@ -39,7 +40,8 @@ export class Leave {
     @Column({
         type: "enum",
         enum: LeaveStatus,
-        default: LeaveStatus.PENDING
+        default: LeaveStatus.PENDING,
+        nullable: false,
     })
     status: LeaveStatus;
 

@@ -29,8 +29,8 @@ export class CreateEmployeeDto {
 
     @IsString()
     @IsEnum(EmploymentStatus)
-    @IsNotEmpty()
-    employmentStatus: EmploymentStatus;
+    @IsOptional()
+    employmentStatus?: EmploymentStatus;
 
     @IsDate()
     @IsNotEmpty()

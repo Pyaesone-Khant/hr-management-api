@@ -18,7 +18,12 @@ export class CreateLeaveTypeDto {
     @IsNotEmpty()
     @Min(1)
     @Max(365)
-    days: number
+    totalDays: number
+
+    @IsInt()
+    @IsNotEmpty()
+    @Min(1)
+    takeableConsecDaysLimit: number
 
     @IsString()
     @IsOptional()

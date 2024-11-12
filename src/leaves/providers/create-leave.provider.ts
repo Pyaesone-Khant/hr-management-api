@@ -31,22 +31,21 @@ export class CreateLeaveProvider {
 
         await this.checkConsecutiveDays(createLeaveDto);
 
-        await this.checkLeave(createLeaveDto);
+        await this.checkLeaveAvailability(createLeaveDto);
+
+        leave = this.leaveRepository.create(createLeaveDto);
+        leave.leaveType = leaveType;
+        leave.employee = employee;
 
         try {
-            leave = this.leaveRepository.create({
-                ...createLeaveDto,
-                leaveType,
-                employee
-            });
             await this.leaveRepository.save(leave);
         } catch (error) {
-            handleException(408);
+            handleException(408, error);
         }
         return leave;
     }
 
-    private async checkLeave(createLeaveDto: CreateLeaveDto) {
+    private async checkLeaveAvailability(createLeaveDto: CreateLeaveDto) {
         let remainingLeaves = await this.remainingLeaves(createLeaveDto.employeeId, createLeaveDto.leaveTypeId);
 
         let leaveDays = this.calculateLeaveDays(createLeaveDto.startDate, createLeaveDto.endDate);
