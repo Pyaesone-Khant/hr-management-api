@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Department } from 'src/departments/department.entity';
 import { DepartmentsService } from 'src/departments/providers/departments.service';
 import { handleException } from 'src/helpers/exception-handler.helper';
+import { Position } from 'src/positions/position.entity';
+import { PositionsService } from 'src/positions/providers/positions.service';
 import { Repository } from 'typeorm';
 import { UpdateEmployeeDto } from '../dtos/update-employee.dto';
 import { Employee } from '../employee.entity';
@@ -13,10 +15,12 @@ export class UpdateEmployeeProvider {
         @InjectRepository(Employee)
         private readonly employeeRepository: Repository<Employee>,
 
-        private readonly departmentsService: DepartmentsService
+        private readonly departmentsService: DepartmentsService,
+
+        private readonly positionsService: PositionsService,
     ) { }
 
-    async createEmployee(id: number, updateEmployeeDto: UpdateEmployeeDto): Promise<Employee> {
+    async updateEmployee(id: number, updateEmployeeDto: UpdateEmployeeDto): Promise<Employee> {
         let employee: Employee | undefined;
 
         employee = await this.employeeRepository.findOne({
@@ -29,6 +33,8 @@ export class UpdateEmployeeProvider {
 
         let department: Department = await this.departmentsService.findOne(updateEmployeeDto.departmentId);
 
+        let position: Position = await this.positionsService.findOne(updateEmployeeDto.positionId)
+
         employee.name = updateEmployeeDto.name ?? employee.name;
         employee.email = updateEmployeeDto.email ?? employee.email;
         employee.dob = updateEmployeeDto.dob ?? employee.dob;
@@ -37,7 +43,9 @@ export class UpdateEmployeeProvider {
         employee.startDate = updateEmployeeDto.startDate ?? employee.startDate;
         employee.endDate = updateEmployeeDto.endDate ?? employee.endDate;
         employee.employmentStatus = updateEmployeeDto.employmentStatus ?? employee.employmentStatus;
+        employee.salary = updateEmployeeDto.salary ?? employee.salary;
         employee.department = department;
+        employee.position = position;
 
         try {
             await this.employeeRepository.save(employee);

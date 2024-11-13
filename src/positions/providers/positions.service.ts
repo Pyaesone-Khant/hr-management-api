@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FindDataBySlugProvider } from 'src/common/providers/find-data-by-slug.provider';
 import { handleException } from 'src/helpers/exception-handler.helper';
 import { Repository } from 'typeorm';
 import { CreatePositionDto } from '../dtos/create-position.dto';
-import { Position } from '../posititon.entity';
-import { FindPositionBySlugProvider } from './find-position-by-slug.provider';
+import { Position } from '../position.entity';
 
 @Injectable()
 export class PositionsService {
@@ -13,7 +13,7 @@ export class PositionsService {
         @InjectRepository(Position)
         private readonly positionRepository: Repository<Position>,
 
-        private readonly findPositionBySlugProvider: FindPositionBySlugProvider,
+        private readonly findDataBySlugProvider: FindDataBySlugProvider,
     ) { }
 
     async findAll(): Promise<Position[]> {
@@ -35,10 +35,10 @@ export class PositionsService {
         let newPostion: Position | undefined;
 
         try {
-            position = await this.findPositionBySlugProvider.findPositionBySlug(createPositionDto.slug);
+            position = await this.findDataBySlugProvider.findDataBySlug(this.positionRepository, createPositionDto.slug);
 
             if (position) {
-                handleException(409, 'Position already exists')
+                handleException(409)
             }
         } catch (error) {
             handleException(408, error)
@@ -79,10 +79,10 @@ export class PositionsService {
         let positionBySlug: Position | undefined;
 
         position = await this.findOne(id);
-        positionBySlug = await this.findPositionBySlugProvider.findPositionBySlug(updatePositionDto.slug);
+        positionBySlug = await this.findDataBySlugProvider.findDataBySlug(this.positionRepository, updatePositionDto.slug);
 
         if (positionBySlug && positionBySlug.id !== id) {
-            handleException(409, 'Position already exists')
+            handleException(409)
         }
 
         position.name = updatePositionDto.name ?? position.name;

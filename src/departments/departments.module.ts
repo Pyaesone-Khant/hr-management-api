@@ -3,11 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Department } from './department.entity';
 import { DepartmentsController } from './departments.controller';
 import { DepartmentsService } from './providers/departments.service';
-import { FindDepartmentBySlugProvider } from './providers/find-department-by-slug.provider';
 
 @Module({
     controllers: [DepartmentsController],
-    providers: [DepartmentsService, FindDepartmentBySlugProvider],
+    providers: [DepartmentsService],
     imports: [
         TypeOrmModule.forFeature([
             Department

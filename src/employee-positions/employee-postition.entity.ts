@@ -1,5 +1,5 @@
 import { Employee } from "src/employees/employee.entity";
-import { Position } from "src/positions/posititon.entity";
+import { Position } from "src/positions/position.entity";
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

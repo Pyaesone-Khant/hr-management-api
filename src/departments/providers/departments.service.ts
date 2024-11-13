@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FindDataBySlugProvider } from 'src/common/providers/find-data-by-slug.provider';
 import { handleException } from 'src/helpers/exception-handler.helper';
 import { Repository } from 'typeorm';
 import { Department } from '../department.entity';
 import { CreateDepartmentDto } from '../dtos/create-department.dto';
 import { UpdateDepartmentDto } from '../dtos/update-department.dto';
-import { FindDepartmentBySlugProvider } from './find-department-by-slug.provider';
 
 @Injectable()
 export class DepartmentsService {
@@ -14,7 +14,7 @@ export class DepartmentsService {
         @InjectRepository(Department)
         private readonly departmentRepository: Repository<Department>,
 
-        private readonly findDepartmentBySlugProvider: FindDepartmentBySlugProvider
+        private readonly findDataBySlugProvider: FindDataBySlugProvider
     ) { }
 
     async findAll(): Promise<Department[]> {
@@ -34,7 +34,7 @@ export class DepartmentsService {
 
         let department: Department;
 
-        let newDepartment = await this.findDepartmentBySlugProvider.findDepartmentBySlug(createDepartmentDto.slug);
+        let newDepartment: Department | undefined = await this.findDataBySlugProvider.findDataBySlug(this.departmentRepository, createDepartmentDto.slug)
 
         if (newDepartment) {
             handleException(409);
@@ -69,10 +69,10 @@ export class DepartmentsService {
         return department;
     }
 
-    async update(id: number, updateDepartmentDto: UpdateDepartmentDto): Promise<any> {
+    async update(id: number, updateDepartmentDto: UpdateDepartmentDto): Promise<Department> {
 
         let department: Department | undefined = await this.findOne(id);
-        let departmentWithSlug: Department | undefined = await this.findDepartmentBySlugProvider.findDepartmentBySlug(updateDepartmentDto.slug);
+        let departmentWithSlug: Department | undefined = await this.findDataBySlugProvider.findDataBySlug(this.departmentRepository, updateDepartmentDto.slug);
 
         if (departmentWithSlug && departmentWithSlug.id !== id) {
             handleException(409, "Duplicate slug!");
@@ -93,9 +93,7 @@ export class DepartmentsService {
 
     async remove(id: number): Promise<object> {
 
-        let department: Department | undefined;
-
-        department = await this.findOne(id);
+        await this.findOne(id);
 
         try {
             await this.departmentRepository.delete(id);

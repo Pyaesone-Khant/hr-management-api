@@ -1,17 +1,19 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Position } from './position.entity';
 import { PositionsController } from './positions.controller';
-import { Position } from './posititon.entity';
 import { PositionsService } from './providers/positions.service';
-import { FindPositionBySlugProvider } from './providers/find-position-by-slug.provider';
 
 @Module({
     controllers: [PositionsController],
-    providers: [PositionsService, FindPositionBySlugProvider],
+    providers: [PositionsService],
     imports: [
         TypeOrmModule.forFeature([
             Position
         ])
+    ],
+    exports: [
+        PositionsService
     ]
 })
 export class PositionsModule { }

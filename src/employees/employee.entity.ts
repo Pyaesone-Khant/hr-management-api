@@ -1,5 +1,6 @@
 import { Department } from "src/departments/department.entity";
 import { Leave } from "src/leaves/leave.entity";
+import { Position } from "src/positions/position.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EmploymentStatus } from "./enums/employment-status.enum";
 
@@ -70,6 +71,12 @@ export class Employee {
     })
     endDate: Date
 
+    @Column({
+        type: "int",
+        nullable: false,
+    })
+    salary: number;
+
     @OneToMany(
         () => Leave,
         leave => leave.employee,
@@ -84,4 +91,13 @@ export class Employee {
         }
     )
     department: Department;
+
+    @ManyToOne(
+        () => Position,
+        pos => pos.employees,
+        {
+            eager: true
+        }
+    )
+    position: Position
 }

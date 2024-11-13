@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DepartmentsModule } from 'src/departments/departments.module';
+import { PositionsModule } from 'src/positions/positions.module';
 import { Employee } from './employee.entity';
 import { EmployeesController } from './employees.controller';
 import { CreateEmployeeProvider } from './providers/create-employee.provider';
@@ -14,7 +15,8 @@ import { UpdateEmployeeProvider } from './providers/update-employee.provider';
         TypeOrmModule.forFeature([
             Employee
         ]),
-        DepartmentsModule
+        DepartmentsModule,
+        PositionsModule
     ],
     exports: [
         EmployeesService

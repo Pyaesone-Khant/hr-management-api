@@ -59,7 +59,7 @@ export class EmployeesService {
     }
 
     async update(id: number, updateEmployeeDto: UpdateEmployeeDto): Promise<Employee> {
-        return await this.updateEmployeeProvider.createEmployee(id, updateEmployeeDto);
+        return await this.updateEmployeeProvider.updateEmployee(id, updateEmployeeDto);
     }
 
     async remove(id: number): Promise<{}> {

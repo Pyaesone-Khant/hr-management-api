@@ -42,5 +42,13 @@ export class CreateEmployeeDto {
 
     @IsInt()
     @IsNotEmpty()
+    salary: number;
+
+    @IsInt()
+    @IsNotEmpty()
     departmentId: number;
+
+    @IsInt()
+    @IsNotEmpty()
+    positionId: number;
 }
