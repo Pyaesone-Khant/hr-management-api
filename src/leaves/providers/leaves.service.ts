@@ -3,8 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { handleException } from 'src/helpers/exception-handler.helper';
 import { Repository } from 'typeorm';
 import { CreateLeaveDto } from '../dtos/create-leave.dto';
+import { LeaveStatus } from '../enums/leave-status.enum';
 import { Leave } from '../leave.entity';
 import { CreateLeaveProvider } from './create-leave.provider';
+import { UpdateLeaveStatusProvider } from './update-leave-status.provider';
 
 @Injectable()
 export class LeavesService {
@@ -13,18 +15,31 @@ export class LeavesService {
         @InjectRepository(Leave)
         private readonly leaveRepository: Repository<Leave>,
 
-        private readonly createLeaveProvider: CreateLeaveProvider
+        private readonly createLeaveProvider: CreateLeaveProvider,
+
+        private readonly updateLeaveStatusProvider: UpdateLeaveStatusProvider
     ) { }
 
-    async findAll(): Promise<Leave[]> {
+    async findAll(status?: LeaveStatus): Promise<Leave[]> {
         let leaves: Leave[] | [];
 
+        let isStatusValid = Object.values(LeaveStatus).includes(status)
+
         try {
-            leaves = await this.leaveRepository.find({
-                relations: [
-                    'employee',
-                ]
-            });
+            if (isStatusValid) {
+                leaves = await this.leaveRepository.find({
+                    where: { status },
+                    relations: [
+                        'employee'
+                    ]
+                })
+            } else {
+                leaves = await this.leaveRepository.find({
+                    relations: [
+                        'employee'
+                    ]
+                })
+            }
         } catch (error) {
             handleException(408);
         }
@@ -54,24 +69,21 @@ export class LeavesService {
         return await this.createLeaveProvider.create(createLeaveDto)
     }
 
-    async update(id: number, updateLeaveDto: CreateLeaveDto): Promise<Leave> {
-        let leave: Leave = await this.findOne(id);
+    async updateStatus(id: number, status: LeaveStatus): Promise<Leave> {
+        return await this.updateLeaveStatusProvider.updateStatus(id, status);
+    }
 
-        if (!leave) {
-            handleException(404);
-        }
-
-        leave.reason = updateLeaveDto.reason ?? leave.reason;
-        leave.description = updateLeaveDto.description ?? leave.description;
-        leave.startDate = updateLeaveDto.startDate ?? leave.startDate;
-        leave.endDate = updateLeaveDto.endDate ?? leave.endDate;
+    async remove(id: number): Promise<object> {
+        await this.findOne(id);
 
         try {
-            await this.leaveRepository.save(leave);
+            await this.leaveRepository.delete(id);
         } catch (error) {
             handleException(408);
         }
 
-        return leave;
+        return {
+            message: "Leave removed successfully"
+        }
     }
 }

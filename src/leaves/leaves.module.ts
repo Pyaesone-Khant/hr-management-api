@@ -6,10 +6,11 @@ import { Leave } from './leave.entity';
 import { LeavesController } from './leaves.controller';
 import { CreateLeaveProvider } from './providers/create-leave.provider';
 import { LeavesService } from './providers/leaves.service';
+import { UpdateLeaveStatusProvider } from './providers/update-leave-status.provider';
 
 @Module({
     controllers: [LeavesController],
-    providers: [LeavesService, CreateLeaveProvider],
+    providers: [LeavesService, CreateLeaveProvider, UpdateLeaveStatusProvider],
     imports: [
         TypeOrmModule.forFeature([
             Leave

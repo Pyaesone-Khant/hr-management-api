@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { CreateLeaveDto } from './dtos/create-leave.dto';
+import { LeaveStatus } from './enums/leave-status.enum';
 import { LeavesService } from './providers/leaves.service';
 
 @Controller('leaves')
@@ -10,8 +11,10 @@ export class LeavesController {
     ) { }
 
     @Get()
-    findAll() {
-        return this.leavesService.findAll()
+    findAll(
+        @Query('status') status?: LeaveStatus,
+    ) {
+        return this.leavesService.findAll(status)
     }
 
     @Post()
@@ -28,4 +31,18 @@ export class LeavesController {
         return this.leavesService.findOne(id)
     }
 
+    @Patch(':id')
+    approve(
+        @Param('id') id: number,
+        @Body() payload: { status: LeaveStatus }
+    ) {
+        return this.leavesService.updateStatus(id, payload.status)
+    }
+
+    @Delete(':id')
+    remove(
+        @Param('id') id: number
+    ) {
+        return this.leavesService.remove(id)
+    }
 }
