@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Leave } from "src/leaves/leave.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class LeaveType {
@@ -42,4 +43,10 @@ export class LeaveType {
         nullable: true,
     })
     description?: string;
+
+    @OneToMany(
+        () => Leave,
+        leave => leave.leaveType
+    )
+    leaves: Leave[];
 }

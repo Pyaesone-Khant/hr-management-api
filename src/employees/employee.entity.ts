@@ -1,7 +1,8 @@
 import { Department } from "src/departments/department.entity";
+import { LeaveType } from "src/leave-types/leave-type.entity";
 import { Leave } from "src/leaves/leave.entity";
 import { Position } from "src/positions/position.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EmploymentStatus } from "./enums/employment-status.enum";
 
 @Entity()
@@ -100,4 +101,12 @@ export class Employee {
         }
     )
     position: Position
+
+    @ManyToMany(
+        () => LeaveType,
+    )
+    @JoinTable({
+        name: 'employee_leave_types'
+    })
+    leaveTypes: LeaveType[];
 }

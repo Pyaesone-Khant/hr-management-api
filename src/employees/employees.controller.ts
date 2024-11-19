@@ -29,6 +29,13 @@ export class EmployeesController {
         return this.employeesService.findOne(id);
     }
 
+    @Get(':id/leave-balance')
+    getLeaveBalance(
+        @Param('id') id: number
+    ) {
+        return this.employeesService.getLeaveBalance(id);
+    }
+
     @Patch(':id')
     update(
         @Param('id') id: number,

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { handleException } from 'src/helpers/exception-handler.helper';
+import { GetLeaveBalanceProvider } from 'src/leaves/providers/get-leave-balance.provider';
 import { Repository } from 'typeorm';
 import { CreateEmployeeDto } from '../dtos/create-employee.dto';
 import { UpdateEmployeeDto } from '../dtos/update-employee.dto';
@@ -17,7 +18,9 @@ export class EmployeesService {
 
         private readonly createEmployeeProvider: CreateEmployeeProvider,
 
-        private readonly updateEmployeeProvider: UpdateEmployeeProvider
+        private readonly updateEmployeeProvider: UpdateEmployeeProvider,
+
+        private readonly getLeaveBalanceProvider: GetLeaveBalanceProvider
     ) { }
 
     async findAll(): Promise<Employee[]> {
@@ -72,6 +75,10 @@ export class EmployeesService {
         }
 
         return { message: "Employee deleted successfully!" };
+    }
+
+    async getLeaveBalance(id: number): Promise<any> {
+        return await this.getLeaveBalanceProvider.getLeaveBalanceByEmployeeId(id);
     }
 
 }

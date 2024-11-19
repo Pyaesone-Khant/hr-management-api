@@ -47,10 +47,7 @@ export class Leave {
 
     @ManyToOne(
         () => LeaveType,
-        leaveType => leaveType.id,
-        {
-            eager: true,
-        }
+        leaveType => leaveType.leaves,
     )
     leaveType: LeaveType;
 

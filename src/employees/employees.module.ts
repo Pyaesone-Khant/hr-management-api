@@ -1,6 +1,8 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DepartmentsModule } from 'src/departments/departments.module';
+import { LeaveTypesModule } from 'src/leave-types/leave-types.module';
+import { LeavesModule } from 'src/leaves/leaves.module';
 import { PositionsModule } from 'src/positions/positions.module';
 import { Employee } from './employee.entity';
 import { EmployeesController } from './employees.controller';
@@ -16,7 +18,9 @@ import { UpdateEmployeeProvider } from './providers/update-employee.provider';
             Employee
         ]),
         DepartmentsModule,
-        PositionsModule
+        PositionsModule,
+        LeaveTypesModule,
+        forwardRef(() => LeavesModule)
     ],
     exports: [
         EmployeesService

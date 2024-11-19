@@ -30,14 +30,16 @@ export class LeavesService {
                 leaves = await this.leaveRepository.find({
                     where: { status },
                     relations: [
-                        'employee'
+                        'employee',
+                        'leaveType'
                     ]
                 })
             } else {
                 leaves = await this.leaveRepository.find({
                     relations: [
-                        'employee'
-                    ]
+                        'employee',
+                        'leaveType'
+                    ],
                 })
             }
         } catch (error) {
