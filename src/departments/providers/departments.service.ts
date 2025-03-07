@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindDataBySlugProvider } from 'src/common/providers/find-data-by-slug.provider';
 import { handleException } from 'src/helpers/exception-handler.helper';
+import { Position } from 'src/positions/position.entity';
+import { PositionsService } from 'src/positions/providers/positions.service';
 import { Repository } from 'typeorm';
 import { Department } from '../department.entity';
 import { CreateDepartmentDto } from '../dtos/create-department.dto';
@@ -14,7 +16,9 @@ export class DepartmentsService {
         @InjectRepository(Department)
         private readonly departmentRepository: Repository<Department>,
 
-        private readonly findDataBySlugProvider: FindDataBySlugProvider
+        private readonly findDataBySlugProvider: FindDataBySlugProvider,
+
+        private readonly positionsService: PositionsService
     ) { }
 
     async findAll(): Promise<Department[]> {
@@ -33,6 +37,7 @@ export class DepartmentsService {
     async create(createDepartmentDto: CreateDepartmentDto): Promise<Department> {
 
         let department: Department;
+        let positions: Position[] | [];
 
         let newDepartment: Department | undefined = await this.findDataBySlugProvider.findDataBySlug(this.departmentRepository, createDepartmentDto.slug)
 
@@ -40,8 +45,13 @@ export class DepartmentsService {
             handleException(409);
         }
 
+        if (createDepartmentDto.positions && createDepartmentDto.positions.length > 0) {
+            positions = await this.positionsService.findPositions(createDepartmentDto.positions);
+        }
+
+
         try {
-            department = this.departmentRepository.create(createDepartmentDto);
+            department = this.departmentRepository.create({ ...createDepartmentDto, positions });
             await this.departmentRepository.save(department);
         } catch (error) {
             handleException(408)
@@ -56,7 +66,8 @@ export class DepartmentsService {
 
         try {
             department = await this.departmentRepository.findOne({
-                where: { id }
+                where: { id },
+                relations: ['positions']
             });
         } catch (error) {
             handleException(408)

@@ -14,9 +14,6 @@ export class DataResponseInterceptor implements NestInterceptor {
     intercept(
         context: ExecutionContext,
         next: CallHandler): Observable<any> {
-        return next.handle().pipe(map(data => ({
-            apiVersion: this.config.apiVersion,
-            data
-        })));
+        return next.handle().pipe(map(data => data));
     }
 }

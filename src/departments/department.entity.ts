@@ -1,5 +1,6 @@
 import { Employee } from "src/employees/employee.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Position } from "src/positions/position.entity";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Department {
@@ -31,6 +32,13 @@ export class Department {
         nullable: true
     })
     description?: string;
+
+    @ManyToMany(
+        () => Position,
+        pos => pos.departments
+    )
+    @JoinTable()
+    positions: Position[];
 
     @OneToMany(
         () => Employee,

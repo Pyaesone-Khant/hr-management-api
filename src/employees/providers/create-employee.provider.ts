@@ -34,6 +34,18 @@ export class CreateEmployeeProvider {
 
         let leaveTypes: LeaveType[] = await this.leaveTypesService.findAll();
 
+        employee = await this.employeeRepository.findOne({
+            where: [
+                { nrc: createEmployeeDto.nrc },
+                { mobileNumber: createEmployeeDto.mobileNumber },
+                { email: createEmployeeDto.email }
+            ]
+        })
+
+        if (employee) {
+            handleException(400, "Employee already exists!")
+        }
+
         try {
             employee = this.employeeRepository.create(createEmployeeDto);
             employee.department = department;

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsArray, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateDepartmentDto {
     @IsString()
@@ -12,4 +12,8 @@ export class CreateDepartmentDto {
     @IsString()
     @IsOptional()
     description?: string;
+
+    @IsArray()
+    @IsOptional()
+    positions?: number[];
 }

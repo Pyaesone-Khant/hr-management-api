@@ -5,6 +5,7 @@ import { handleException } from 'src/helpers/exception-handler.helper';
 import { Repository } from 'typeorm';
 import { CreatePositionDto } from '../dtos/create-position.dto';
 import { Position } from '../position.entity';
+import { FindPositionsByIds } from './find-positions-by-ids';
 
 @Injectable()
 export class PositionsService {
@@ -14,6 +15,8 @@ export class PositionsService {
         private readonly positionRepository: Repository<Position>,
 
         private readonly findDataBySlugProvider: FindDataBySlugProvider,
+
+        private readonly findPositionsByIds: FindPositionsByIds,
     ) { }
 
     async findAll(): Promise<Position[]> {
@@ -112,5 +115,9 @@ export class PositionsService {
         return {
             message: 'Position removed successfully'
         };
+    }
+
+    async findPositions(ids: number[]): Promise<Position[]> {
+        return await this.findPositionsByIds.findPositions(ids);
     }
 }
