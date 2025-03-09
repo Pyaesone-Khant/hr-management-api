@@ -85,7 +85,7 @@ export class DepartmentsService {
         let department: Department | undefined = await this.findOne(id);
         let departmentWithSlug: Department | undefined = await this.findDataBySlugProvider.findDataBySlug(this.departmentRepository, updateDepartmentDto.slug);
 
-        if (departmentWithSlug && departmentWithSlug.id !== id) {
+        if (departmentWithSlug && departmentWithSlug.id !== department.id) {
             handleException(409, "Duplicate slug!");
         }
 
