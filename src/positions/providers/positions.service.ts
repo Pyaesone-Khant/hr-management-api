@@ -84,7 +84,7 @@ export class PositionsService {
         position = await this.findOne(id);
         positionBySlug = await this.findDataBySlugProvider.findDataBySlug(this.positionRepository, updatePositionDto.slug);
 
-        if (positionBySlug && positionBySlug.id !== id) {
+        if (positionBySlug && positionBySlug.id !== position.id) {
             handleException(409)
         }
 
