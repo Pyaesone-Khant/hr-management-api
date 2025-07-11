@@ -37,8 +37,9 @@ export class Employee {
     @Column({
         type: 'varchar',
         length: 256,
+        nullable: false,
     })
-    email?: string;
+    email: string;
 
     @Column({
         type: 'varchar',
