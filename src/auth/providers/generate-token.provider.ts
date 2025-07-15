@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import jwtConfig from 'src/configs/jwt.config';
+import { RefreshTokensService } from 'src/refresh-tokens/refresh-tokens.service';
 import { User } from 'src/users/user.entity';
 
 @Injectable()
@@ -11,7 +12,9 @@ export class GenerateTokenProvider {
         private readonly jwtService: JwtService,
 
         @Inject(jwtConfig.KEY)
-        private readonly jwtConfiguration: ConfigType<typeof jwtConfig>
+        private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+
+        private readonly refreshTokensService: RefreshTokensService
     ) { }
 
 
@@ -26,10 +29,7 @@ export class GenerateTokenProvider {
                 }
             ),
 
-            this.signToken(
-                user.id,
-                this.jwtConfiguration.refreshTokenTtl
-            )
+            this.refreshTokensService.create(user.id).then(token => token.token)
         ]);
 
         return {

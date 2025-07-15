@@ -20,6 +20,7 @@ import { EmployeesModule } from './employees/employees.module';
 import { LeaveTypesModule } from './leave-types/leave-types.module';
 import { LeavesModule } from './leaves/leaves.module';
 import { PositionsModule } from './positions/positions.module';
+import { RefreshTokensModule } from './refresh-tokens/refresh-tokens.module';
 import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
 
@@ -60,7 +61,8 @@ const ENV = process.env.NODE_ENV;
         ConfigModule.forFeature(jwtConfig),
         JwtModule.registerAsync(jwtConfig.asProvider()),
         UsersModule,
-        RolesModule
+        RolesModule,
+        RefreshTokensModule
     ],
     controllers: [AppController],
     providers: [

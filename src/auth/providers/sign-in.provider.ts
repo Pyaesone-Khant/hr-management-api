@@ -43,12 +43,25 @@ export class SignInProvider {
 
         const { accessToken, refreshToken, accessTokenExpiredTime } = await this.generateTokenProvider.generateAccessToken(user);
 
-        return {
+        if (!accessToken || !refreshToken) {
+            throw new UnauthorizedException(`Failed to generate access or refresh token!`);
+        };
+
+        const responseObject = {
             accessToken,
-            roles: user.roles,
+            roles: user.roles?.map(role => role.name) || [],
             expiredAt: accessTokenExpiredTime,
             refreshToken
-        }
+        };
 
+        // res.cookie("_jwt", JSON.stringify(responseObject), {
+        //     httpOnly: true,
+        //     secure: process.env.NODE_ENV === 'production',
+        //     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        //     sameSite: 'strict',
+        //     path: '/'
+        // });
+
+        return responseObject;
     }
 }

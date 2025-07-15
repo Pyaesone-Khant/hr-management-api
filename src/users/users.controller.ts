@@ -1,4 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { AuthTypes } from 'src/auth/decorators/auth.decorator';
+import { AuthType } from 'src/auth/enum/auth-types.enum';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 
@@ -8,6 +10,12 @@ export class UsersController {
     constructor(
         private readonly usersService: UsersService,
     ) { }
+
+    @Get()
+    @AuthTypes(AuthType.None)
+    findAll() {
+        return this.usersService.findAll();
+    }
 
     @Post()
     createUser(
