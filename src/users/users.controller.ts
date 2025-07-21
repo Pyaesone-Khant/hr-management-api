@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { AuthTypes } from 'src/auth/decorators/auth.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AuthType } from 'src/auth/enum/auth-types.enum';
+import { RoleEnum } from 'src/roles/enums/role.enum';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 
@@ -13,16 +15,25 @@ export class UsersController {
 
     @Get()
     @AuthTypes(AuthType.None)
-    findAll() {
-        return this.usersService.findAll();
+    findAll(
+        @Query('status') status: string
+    ) {
+        return this.usersService.findAll(status);
     }
 
     @Post()
+    @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
     createUser(
         @Body() createUserDto: CreateUserDto
     ) {
-        // Logic to create a user will go here
         return this.usersService.createUser(createUserDto);
     }
 
+    @Delete(':id')
+    @Roles(RoleEnum.SUPER_ADMIN, RoleEnum.ADMIN)
+    remove(
+        @Param('id') id: string
+    ) {
+        return this.usersService.remove(+id);
+    }
 }

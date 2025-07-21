@@ -1,5 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
-import { Request } from 'express';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateDepartmentDto } from './dtos/create-department.dto';
 import { UpdateDepartmentDto } from './dtos/update-department.dto';
 import { DepartmentsService } from './providers/departments.service';
@@ -12,14 +11,7 @@ export class DepartmentsController {
     ) { }
 
     @Get()
-    findAll(
-        @Req() req: Request
-    ) {
-
-        const cookies = req.cookies;
-
-        console.log(cookies)
-
+    findAll() {
         return this.deparmentsService.findAll();
     }
 

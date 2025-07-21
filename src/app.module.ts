@@ -17,8 +17,10 @@ import jwtConfig from './configs/jwt.config';
 import { DepartmentsModule } from './departments/departments.module';
 import { EmployeePositionsModule } from './employee-positions/employee-positions.module';
 import { EmployeesModule } from './employees/employees.module';
+import { RandomPasswordGeneratorProvider } from './helpers/random-password-generator.provider';
 import { LeaveTypesModule } from './leave-types/leave-types.module';
 import { LeavesModule } from './leaves/leaves.module';
+import { OfficesModule } from './offices/offices.module';
 import { PositionsModule } from './positions/positions.module';
 import { RefreshTokensModule } from './refresh-tokens/refresh-tokens.module';
 import { RolesModule } from './roles/roles.module';
@@ -62,7 +64,8 @@ const ENV = process.env.NODE_ENV;
         JwtModule.registerAsync(jwtConfig.asProvider()),
         UsersModule,
         RolesModule,
-        RefreshTokensModule
+        RefreshTokensModule,
+        OfficesModule
     ],
     controllers: [AppController],
     providers: [
@@ -76,10 +79,12 @@ const ENV = process.env.NODE_ENV;
             useClass: AuthenticationGuard
         },
         FindDataBySlugProvider,
-        AccessTokenGuard
+        AccessTokenGuard,
+        RandomPasswordGeneratorProvider
     ],
     exports: [
-        FindDataBySlugProvider
+        FindDataBySlugProvider,
+        RandomPasswordGeneratorProvider
     ]
 })
 export class AppModule { }

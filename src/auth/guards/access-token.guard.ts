@@ -24,13 +24,6 @@ export class AccessTokenGuard implements CanActivate {
             throw new UnauthorizedException();
         }
 
-        const decodedToken = this.jwtService.decode(accessToken, { json: true });
-
-        // console.log(decodedToken);
-
-        console.log("Decoded Token: ", decodedToken);
-        console.log("Token Expiration Time: ", new Date(decodedToken?.exp * 1000));
-        console.log("is token expired: ", decodedToken?.exp * 1000 < Date.now());
 
         try {
             const payload = await this.jwtService.verifyAsync(accessToken, this.jwtConfiguration);
